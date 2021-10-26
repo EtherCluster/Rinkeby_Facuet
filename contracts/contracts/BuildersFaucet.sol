@@ -2,33 +2,45 @@
 
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 
 contract BuildersFaucet {
-    uint256 totalFunds;
+    uint256 public totalFunds;
+    uint256 public payOutAmt;
 
     event Deposited(address indexed userAddress, uint256 weiAmount);
     event TokensSent(address indexed userAddress, uint256 weiAmount);
+    address public owner;
 
     constructor() {
-        console.log("Hello! This is the Builders Faucet contract!!");
+        
+        owner = msg.sender;
+        // console.log("Hello! This is the Builders Faucet contract!!");
     }
 
+//lets user deposit to the contract
     function deposit() public payable {
         emit Deposited(msg.sender, msg.value);
         totalFunds = totalFunds + msg.value;
     }
-
-
-    function sendTokensToAddress(address userAddress, uint256 amount) public {
-        require(payable(userAddress).send(amount));
-        totalFunds = totalFunds - amount;
-        console.log("We just sent %d to %s ", amount, userAddress);
-        emit TokensSent(userAddress, amount);
+    
+//functio where owners can set payout amount
+function setPayoutAmt(uint256 weiAmtPayout) public{
+    require(msg.sender == owner);
+       payOutAmt = weiAmtPayout;
     }
 
+//this will pay out users who request -- the reason we have address as input paramter and not msg.sender is becasue we will use web3 on the frontend to get the user's address
+    function sendTokensToAddress(address payable userAddress) public payable{
+        require(payable(userAddress).send(payOutAmt));
+        totalFunds = totalFunds - payOutAmt;
+        // console.log("We just sent %d to %s ", amount, userAddress);
+        emit TokensSent(userAddress, payOutAmt);
+    }
+
+//returns total fund sin contract
     function getTotalFunds() public view returns (uint256) {
-        console.log("We have %d total funds!", totalFunds);
+        // console.log("We have %d total funds!", totalFunds);
         return totalFunds;
     }
 }
