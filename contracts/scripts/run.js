@@ -8,7 +8,7 @@ const main = async () => {
 
   let totalFunds = await buildersFaucetContract.getTotalFunds();
   totalFunds = parseInt(totalFunds);
-  console.log("totalFunds: ", totalFunds);
+  console.log("🏦 totalFunds: ", totalFunds);
 
   const amountToDeposit = 80000000;
   console.log("💰 → 🐷 depositing => ", amountToDeposit);
@@ -17,7 +17,28 @@ const main = async () => {
 
   totalFunds = await buildersFaucetContract.getTotalFunds();
   totalFunds = parseInt(totalFunds);
-  console.log("totalFunds: ", totalFunds);
+  console.log("🏦 totalFunds: ", totalFunds);
+
+  console.log("setting payout amount => ", 40000);
+  tx = await buildersFaucetContract.setPayoutAmt(40000);
+  await tx.wait();
+
+  totalFunds = await buildersFaucetContract.getTotalFunds();
+  totalFunds = parseInt(totalFunds);
+  console.log("🏦 totalFunds: ", totalFunds);
+
+  console.log(
+    "💸 💸 💸 💸 💸  sending money to => ",
+    "0x061294782b7C73a675cF54124853c8133e3463FC"
+  );
+  tx = await buildersFaucetContract.sendTokensToAddress(
+    "0x061294782b7C73a675cF54124853c8133e3463FC"
+  );
+  await tx.wait();
+
+  totalFunds = await buildersFaucetContract.getTotalFunds();
+  totalFunds = parseInt(totalFunds);
+  console.log("🏦 totalFunds: ", totalFunds);
 };
 
 const runMain = async () => {
