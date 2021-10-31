@@ -12,8 +12,9 @@ contract BuildersFaucet {
     event TokensSent(address indexed userAddress, uint256 weiAmount);
     address public owner;
 
-    constructor() {
-        
+    constructor() payable {
+        totalFunds = 0;
+        payOutAmt = 6000;
         owner = msg.sender;
         // console.log("Hello! This is the Builders Faucet contract!!");
     }
@@ -23,7 +24,7 @@ contract BuildersFaucet {
         emit Deposited(msg.sender, msg.value);
         totalFunds = totalFunds + msg.value;
     }
-    
+
 //functio where owners can set payout amount
 function setPayoutAmt(uint256 weiAmtPayout) public{
     require(msg.sender == owner);
@@ -31,11 +32,11 @@ function setPayoutAmt(uint256 weiAmtPayout) public{
     }
 
 //this will pay out users who request -- the reason we have address as input paramter and not msg.sender is becasue we will use web3 on the frontend to get the user's address
-    function sendTokensToAddress(address payable userAddress) public payable{
-        require(payable(userAddress).send(payOutAmt));
-        totalFunds = totalFunds - payOutAmt;
+    function sendTokensToAddress(address userAddress) public {
+        require(payable(userAddress).send(6000));
+        totalFunds = totalFunds - 6000;
         // console.log("We just sent %d to %s ", amount, userAddress);
-        emit TokensSent(userAddress, payOutAmt);
+        emit TokensSent(userAddress, 6000);
     }
 
 //returns total fund sin contract
