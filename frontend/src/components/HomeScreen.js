@@ -4,6 +4,7 @@ import { useToast, Button } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import axios from "axios";
 import { deposit, getTotalFunds } from "../web3lib";
+import IntroAndConnectWallet from "./IntroAndConnectWallet";
 
 function HomeScreen() {
   const toast = useToast();
@@ -66,52 +67,6 @@ function HomeScreen() {
 
     if (isCorrectNetwork) fetchUserBalance();
   }, [isCorrectNetwork, userWalletAddress]);
-
-  const connectWallet = async () => {
-    try {
-      setIsLoading(true);
-      const { ethereum } = window;
-
-      if (!ethereum) {
-        toast({
-          position: "top-right",
-          title: "Please install the MetaMask extension",
-          description: "Playing this game requires MetaMask and a Wallet!",
-          status: "error",
-          duration: 4200,
-          isClosable: true,
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      /*
-       * Fancy method to request access to account.
-       */
-      const accounts = await ethereum.request({
-        method: "eth_requestAccounts",
-      });
-
-      /*
-       * Boom! This should print out public address once we authorize Metamask.
-       */
-      console.log("Connected", accounts[0]);
-
-      toast({
-        position: "top",
-        title: "Connected to Ethereum!!",
-        status: "success",
-        duration: 2200,
-        isClosable: true,
-      });
-
-      setUserWalletAddress(accounts[0]);
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      console.log(error);
-    }
-  };
 
   const checkIfWalletIsConnected = () => {
     const { ethereum } = window;
@@ -226,15 +181,7 @@ function HomeScreen() {
   if (isPageLoading) return <div></div>;
   if (!userWalletAddress)
     return (
-      <div className="m-12">
-        <Button
-          colorScheme="blue"
-          onClick={connectWallet}
-          isLoading={isLoading}
-        >
-          Connect Wallet!
-        </Button>
-      </div>
+      <IntroAndConnectWallet setUserWalletAddress={setUserWalletAddress} />
     );
   if (!isCorrectNetwork) return <div>Please change network to Rinkeby!</div>;
 
