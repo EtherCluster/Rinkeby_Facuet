@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import axios from "axios";
 import { deposit, getTotalFunds } from "../web3lib";
 import IntroAndConnectWallet from "./IntroAndConnectWallet";
+import styled from "styled-components";
 
 function HomeScreen() {
   const toast = useToast();
@@ -197,13 +198,10 @@ function HomeScreen() {
   if (!isCorrectNetwork) return <div>Please change network to Rinkeby!</div>;
 
   return (
-    <div className="inline-block p-6 m-4 mx-auto bg-purple-200 rounded-lg">
-      <div className="mb-4 font-semibold">
-        Builder's Rinkeby Faucet, by @EtherCluster and @javi
-      </div>
-      <div className="p-2 font-mono text-xs text-center bg-purple-100 rounded select-none">
+    <Wrapper className="flex flex-col items-center justify-center">
+      <AddressIndicatorWrapper className="flex items-center justify-center">
         {userWalletAddress}
-      </div>
+      </AddressIndicatorWrapper>
 
       <div className="flex justify-between mt-4">
         {userFunds && (
@@ -243,8 +241,30 @@ function HomeScreen() {
           </Button>
         </div>
       </div>
-    </div>
+    </Wrapper>
   );
 }
 
 export default HomeScreen;
+
+const Wrapper = styled.div`
+  width: 1140px;
+  height: 276px;
+
+  background: #ffffff;
+  border-radius: 10px;
+`;
+
+const AddressIndicatorWrapper = styled.div`
+  width: 485px;
+  height: 45px;
+  border: 1px solid #f53855;
+  box-sizing: border-box;
+  border-radius: 50px;
+  color: #f53855;
+  font-family: Rubik;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+`;
