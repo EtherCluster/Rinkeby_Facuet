@@ -6,7 +6,7 @@ function Button({ onClick, children }) {
       <div
         onClick={onClick}
         style={{
-          background: "#F53838",
+          background: "#ff0c29",
           width: 250,
           height: 60,
           borderRadius: 10,
