@@ -8,7 +8,7 @@ import { deposit, getTotalFunds } from "../web3lib";
 function HomeScreen() {
   const toast = useToast();
 
-  const [isCorrectNetwork, setIsCorrectNetwork] = useState(true);
+  const [isCorrectNetwork, setIsCorrectNetwork] = useState(false);
   const [totalFunds, setTotalFunds] = useState(false);
   const [userWalletAddress, setUserWalletAddress] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
@@ -127,9 +127,9 @@ function HomeScreen() {
 
     checkIfWalletIsConnected();
     if (userWalletAddress) {
-      fetchTotalFunds();
+      if (isCorrectNetwork) fetchTotalFunds();
     }
-  }, [userWalletAddress]);
+  }, [userWalletAddress, isCorrectNetwork]);
 
   const contribute = async () => {
     // ! This is 0.1 ETH in wei: 100000000000000000
