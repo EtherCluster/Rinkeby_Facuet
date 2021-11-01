@@ -9,6 +9,7 @@ function HomeScreen() {
   const toast = useToast();
 
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(false);
+  const [userFunds, setUserFunds] = useState(false);
   const [totalFunds, setTotalFunds] = useState(false);
   const [userWalletAddress, setUserWalletAddress] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
@@ -48,6 +49,23 @@ function HomeScreen() {
       checkNetwork();
     }
   }, []);
+
+  useEffect(() => {
+    const fetchUserBalance = async () => {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const userFunds = await provider.getBalance(userWalletAddress);
+
+      const userFundsInEnth = Web3.utils.fromWei(
+        String(parseInt(userFunds)),
+        "ether"
+      );
+      setUserFunds(userFundsInEnth);
+
+      console.log("User's Balance 🐷: ", userFundsInEnth);
+    };
+
+    if (isCorrectNetwork) fetchUserBalance();
+  }, [isCorrectNetwork, userWalletAddress]);
 
   const connectWallet = async () => {
     try {
@@ -108,7 +126,7 @@ function HomeScreen() {
         console.log({ accounts });
         if (accounts.length !== 0) {
           const theUsersWalletAddress = accounts[0];
-          console.log("Found account : " + theUsersWalletAddress);
+          console.log("wallet address found: " + theUsersWalletAddress);
           setUserWalletAddress(theUsersWalletAddress);
         } else {
           console.log("No account found");
@@ -121,8 +139,13 @@ function HomeScreen() {
   React.useEffect(() => {
     const fetchTotalFunds = async () => {
       const fetchedFunds = await getTotalFunds();
-      console.log("Fetched Total Funds 🐷: ", parseInt(fetchedFunds));
-      setTotalFunds(parseInt(fetchedFunds));
+
+      const fetchedFundsInEnth = Web3.utils.fromWei(
+        String(parseInt(fetchedFunds)),
+        "ether"
+      );
+      setTotalFunds(fetchedFundsInEnth);
+      console.log("Faucet's Balance 🐷: ", fetchedFundsInEnth);
     };
 
     checkIfWalletIsConnected();
@@ -169,6 +192,8 @@ function HomeScreen() {
       setIsLoading(false);
       return false;
     });
+    console.log("The transaction: ");
+    console.log(tx);
   };
 
   const requestEth = () => {
@@ -221,6 +246,22 @@ function HomeScreen() {
       <div className="p-2 font-mono text-xs text-center bg-purple-100 rounded select-none">
         {userWalletAddress}
       </div>
+
+      <div className="flex justify-between mt-4">
+        {userFunds && (
+          <div>
+            <div>User's Balance:</div>
+            <div>{userFunds} ETH</div>
+          </div>
+        )}
+        {totalFunds && (
+          <div>
+            <div>Faucet's Balance:</div>
+            <div>{totalFunds} ETH</div>
+          </div>
+        )}
+      </div>
+
       <div className="flex items-center justify-between">
         {totalFunds > 0 && (
           <div className="mt-4 mr-4">
