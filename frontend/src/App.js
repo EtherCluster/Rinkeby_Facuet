@@ -2,6 +2,7 @@ import "./App.css";
 import { extendTheme, ChakraProvider } from "@chakra-ui/react";
 import HomeScreen from "./components/HomeScreen";
 import Header from "./components/Header";
+import Stats from "./components/Stats";
 
 const chackraConfig = {
   useSystemColorMode: false,
@@ -21,8 +22,9 @@ function App() {
   return (
     <ChakraProvider theme={customTheme}>
       <Header />
-      <div className="flex justify-center w-full">
+      <div className="flex flex-col items-center justify-center w-full">
         <HomeScreen />
+        <Stats />
       </div>
     </ChakraProvider>
   );
