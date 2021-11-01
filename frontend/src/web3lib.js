@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import abi from "./BuildersFaucet.json";
 
-export const contractAddress = "0xc1e9961da80a6F2D052dD4C8Da3725ed98E2162b";
+export const contractAddress = "0xBED16054F0be4a9c8C992C5642D715cDAA413446";
 // export const correctNetworkId = 4;
 
 const contractABI = abi.abi;
