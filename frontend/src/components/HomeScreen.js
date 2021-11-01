@@ -159,7 +159,7 @@ function HomeScreen() {
     setIsLoading(true);
 
     const priceInWei = Web3.utils.toWei(
-      "0.1".toLocaleString(undefined, {
+      "0.001".toLocaleString(undefined, {
         minimumFractionDigits: 18,
         maximumFractionDigits: 18,
       }),
