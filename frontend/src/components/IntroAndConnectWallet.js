@@ -68,7 +68,7 @@ function IntroAndConnectWallet({ setUserWalletAddress }) {
           onClick={connectWallet}
           isLoading={isLoading}
         >
-          Connect Wallet!
+          Connect Wallet
         </Button>
       </div>
     </div>

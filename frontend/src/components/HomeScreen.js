@@ -34,7 +34,10 @@ function HomeScreen() {
 
   const detectEthereumNetwork = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const info = await provider.getNetwork();
+    const info = await provider.getNetwork().catch((e) => {
+      console.log("Error 1");
+      console.log(e);
+    });
     if (info.name !== "rinkeby") {
       setIsCorrectNetwork(false);
     } else {
@@ -54,7 +57,12 @@ function HomeScreen() {
   useEffect(() => {
     const fetchUserBalance = async () => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const userFunds = await provider.getBalance(userWalletAddress);
+      const userFunds = await provider
+        .getBalance(userWalletAddress)
+        .catch((e) => {
+          console.log("Error 2");
+          console.log(e);
+        });
 
       const userFundsInEnth = Web3.utils.fromWei(
         String(parseInt(userFunds)),
@@ -65,7 +73,7 @@ function HomeScreen() {
       console.log("User's Balance 🐷: ", userFundsInEnth);
     };
 
-    if (isCorrectNetwork) fetchUserBalance();
+    if (isCorrectNetwork) if (userWalletAddress) fetchUserBalance();
   }, [isCorrectNetwork, userWalletAddress]);
 
   const checkIfWalletIsConnected = () => {
@@ -93,7 +101,10 @@ function HomeScreen() {
 
   React.useEffect(() => {
     const fetchTotalFunds = async () => {
-      const fetchedFunds = await getTotalFunds();
+      const fetchedFunds = await getTotalFunds().catch((e) => {
+        console.log("Error 3");
+        console.log(e);
+      });
 
       const fetchedFundsInEnth = Web3.utils.fromWei(
         String(parseInt(fetchedFunds)),

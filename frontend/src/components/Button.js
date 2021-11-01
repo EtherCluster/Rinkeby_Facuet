@@ -2,7 +2,7 @@ import React from "react";
 
 function Button({ onClick, children }) {
   return (
-    <div>
+    <div className="relative flex items-center justify-center">
       <div
         onClick={onClick}
         style={{
@@ -14,10 +14,21 @@ function Button({ onClick, children }) {
           fontWeight: 600,
           color: "white",
         }}
-        className="flex items-center justify-center cursor-pointer"
+        className="z-10 flex items-center justify-center cursor-pointer select-none"
       >
         {children}
       </div>
+      <div
+        className="absolute"
+        style={{
+          width: "211.83px",
+          height: 60,
+          top: 16,
+          background: "rgba(245, 56, 56, 0.35)",
+          filter: "blur(10px)",
+          borderRadius: 10,
+        }}
+      ></div>
     </div>
   );
 }
