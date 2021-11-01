@@ -22,8 +22,10 @@ function App() {
   return (
     <ChakraProvider theme={customTheme}>
       <Header />
-      <div className="flex flex-col items-center justify-center w-full">
-        <HomeScreen />
+      <div className="flex flex-col items-center justify-center w-full mb-40 bg-white">
+        <div className="z-10 flex items-center justify-center w-full bg-white">
+          <HomeScreen />
+        </div>
         <Stats />
       </div>
     </ChakraProvider>

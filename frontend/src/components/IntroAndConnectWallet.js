@@ -53,14 +53,14 @@ function IntroAndConnectWallet({ setUserWalletAddress }) {
   };
 
   return (
-    <div style={{ width: 799, marginTop: 80 }}>
+    <div style={{ width: 799, marginTop: 40 }}>
       <div className="font-semibold text-center" style={{ fontSize: 50 }}>
         Get some Rinkeby Ethereum via the{" "}
         <span className="font-normal">BlockchainBuilders</span>
         <span className="font-bold">Faucet</span>
       </div>
       <div
-        style={{ marginTop: 71 }}
+        style={{ marginTop: 71, marginBottom: 20 }}
         className="flex justify-center w-full mx-auto"
       >
         <Button

@@ -4,7 +4,7 @@ function Header() {
   return (
     <div
       style={{ marginLeft: 30, marginTop: 46, fontSize: 20 }}
-      className="flex items-center"
+      className="flex items-center bg-white"
     >
       <img
         src={"/bucket.png"}
