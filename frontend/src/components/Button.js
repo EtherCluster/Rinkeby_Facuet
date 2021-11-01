@@ -1,23 +1,15 @@
 import React from "react";
+import styled from "styled-components";
 
 function Button({ onClick, children }) {
   return (
     <div className="relative flex items-center justify-center">
-      <div
+      <Wrapper
         onClick={onClick}
-        style={{
-          background: "#ff0c29",
-          width: 250,
-          height: 60,
-          borderRadius: 10,
-          fontSize: 16,
-          fontWeight: 600,
-          color: "white",
-        }}
-        className="z-10 flex items-center justify-center cursor-pointer select-none"
+        className="z-10 flex items-center justify-center transition-all cursor-pointer select-none"
       >
         {children}
-      </div>
+      </Wrapper>
       <div
         className="absolute"
         style={{
@@ -34,3 +26,21 @@ function Button({ onClick, children }) {
 }
 
 export default Button;
+
+// hover: f5001d
+
+const Wrapper = styled.button`
+  background: #ff0c29;
+  width: 250px;
+  height: 60px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  :hover {
+    background-color: #d3182c;
+  }
+  :active {
+    background-color: #f5001d;
+  }
+`;
