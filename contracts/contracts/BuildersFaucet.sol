@@ -7,41 +7,67 @@ pragma solidity ^0.8.0;
 contract BuildersFaucet {
     uint256 public totalFunds;
     uint256 public payOutAmt;
+    uint public totalInteractions;
+    address[] public contributors;
 
-    event Deposited(address indexed userAddress, uint256 weiAmount);
-    event TokensSent(address indexed userAddress, uint256 weiAmount);
+    event Deposited(address indexed userAddress, uint256 weiAmount, uint totalInteractions, uint256 totalFunds, uint totalInteractors);
+    event TokensSent(address indexed userAddress, uint256 weiAmount, uint totalInteractions, uint256 totalFunds);
+
     address public owner;
 
     constructor() payable {
         totalFunds = 0;
-        payOutAmt = 6000;
+        payOutAmt = 10000000;
         owner = msg.sender;
-        // console.log("Hello! This is the Builders Faucet contract!!");
     }
 
-//lets user deposit to the contract
+    //lets user deposit to the contract
     function deposit() public payable {
-        emit Deposited(msg.sender, msg.value);
+        totalInteractions = totalInteractions + 1;
         totalFunds = totalFunds + msg.value;
+
+        bool contributorExist = false;
+        for (uint i=0; i<contributors.length; i++) {
+            if (contributors[i] == msg.sender) {
+                contributorExist = true;
+            }
+        }
+        if (!contributorExist) {
+            contributors.push(msg.sender);
+        }
+
+        emit Deposited(msg.sender, msg.value, totalInteractions, totalFunds, contributors.length);
     }
 
-//functio where owners can set payout amount
-function setPayoutAmt(uint256 weiAmtPayout) public{
-    require(msg.sender == owner);
-       payOutAmt = weiAmtPayout;
+    //functio where owners can set payout amount
+    function setPayoutAmt(uint256 weiAmtPayout) public{
+        require(msg.sender == owner);
+        payOutAmt = weiAmtPayout;
     }
 
-//this will pay out users who request -- the reason we have address as input paramter and not msg.sender is becasue we will use web3 on the frontend to get the user's address
+    //this will pay out users who request -- the reason we have address as input paramter and not msg.sender is becasue we will use web3 on the frontend to get the user's address
     function sendTokensToAddress(address userAddress) public {
-        require(payable(userAddress).send(6000));
-        totalFunds = totalFunds - 6000;
-        // console.log("We just sent %d to %s ", amount, userAddress);
-        emit TokensSent(userAddress, 6000);
+        require(payable(userAddress).send(payOutAmt));
+        totalInteractions = totalInteractions + 1;
+        totalFunds = totalFunds - payOutAmt;
+        emit TokensSent(userAddress, payOutAmt, totalInteractions, totalFunds);
     }
 
-//returns total fund sin contract
+    //returns total fund sin contract
     function getTotalFunds() public view returns (uint256) {
         // console.log("We have %d total funds!", totalFunds);
         return totalFunds;
+    }
+
+    //returns total contributors
+    function getTotalContributors() public view returns (uint256) {
+        // console.log("We have %d total funds!", totalFunds);
+        return contributors.length;
+    }
+
+    //returns total requests
+    function getTotalRequests() public view returns (uint256) {
+        // console.log("We have %d total funds!", totalFunds);
+        return totalInteractions;
     }
 }
