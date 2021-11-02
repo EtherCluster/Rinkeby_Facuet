@@ -17,7 +17,7 @@ contract BuildersFaucet {
 
     constructor() payable {
         totalFunds = 0;
-        payOutAmt = 10000000;
+        payOutAmt = 50000000;
         owner = msg.sender;
     }
 
