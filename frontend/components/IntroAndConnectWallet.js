@@ -1,4 +1,5 @@
 import { useToast } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import React from "react";
 import Button from "./Button";
 
@@ -14,8 +15,8 @@ function IntroAndConnectWallet({ setUserWalletAddress }) {
       if (!ethereum) {
         toast({
           position: "top-right",
-          title: "Please install the MetaMask extension",
-          description: "Playing this game requires MetaMask and a Wallet!",
+          //   title: "Please install the MetaMask extension",
+          description: "Please install the MetaMask extension",
           status: "error",
           duration: 4200,
           isClosable: true,
@@ -59,18 +60,26 @@ function IntroAndConnectWallet({ setUserWalletAddress }) {
         <span className="font-normal">BlockchainBuilders</span>
         <span className="font-bold">Faucet</span>
       </div>
-      <div
-        style={{ marginTop: 71, marginBottom: 20 }}
-        className="flex justify-center w-full mx-auto"
+      <motion.div
+        initial={{ opacity: 0, scale: 0.7, y: 0 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{
+          delay: 0.05,
+        }}
       >
-        <Button
-          colorScheme="blue"
-          onClick={connectWallet}
-          isLoading={isLoading}
+        <div
+          style={{ marginTop: 71, marginBottom: 20 }}
+          className="flex justify-center w-full mx-auto"
         >
-          Connect Wallet
-        </Button>
-      </div>
+          <Button
+            colorScheme="blue"
+            onClick={connectWallet}
+            isLoading={isLoading}
+          >
+            Connect Wallet
+          </Button>
+        </div>
+      </motion.div>
     </div>
   );
 }

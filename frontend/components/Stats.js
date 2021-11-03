@@ -3,7 +3,7 @@ import { BsFillPiggyBankFill, BsFillPeopleFill } from "react-icons/bs";
 import { HiServer } from "react-icons/hi";
 import styled from "styled-components";
 
-function Stats() {
+function Stats({ totalFunds, totalContributors, totalRequests }) {
   return (
     <div className="flex flex-col items-center justify-center w-full">
       <div
@@ -20,7 +20,12 @@ function Stats() {
                 <BsFillPiggyBankFill size="19" color="#ff0c29" />
               </div>
               <div className="w-32 ml-6">
-                <div style={{ fontWeight: 700, fontSize: 25 }}>90 +</div>
+                <div style={{ fontWeight: 700, fontSize: 25 }}>
+                  {parseFloat(totalFunds).toLocaleString(undefined, {
+                    minimumFractionDigits: 4,
+                    maximumFractionDigits: 4,
+                  })}
+                </div>
                 <div style={{ fontWeight: 400, fontSize: 20 }}>
                   Ethereum Available
                 </div>
@@ -38,7 +43,9 @@ function Stats() {
                 <BsFillPeopleFill size="19" color="#ff0c29" />
               </div>
               <div className="w-32 ml-6">
-                <div style={{ fontWeight: 700, fontSize: 25 }}>40 +</div>
+                <div style={{ fontWeight: 700, fontSize: 25 }}>
+                  {totalContributors.toLocaleString()}
+                </div>
                 <div style={{ fontWeight: 400, fontSize: 20 }}>
                   Contributors
                 </div>
@@ -56,7 +63,9 @@ function Stats() {
                 <HiServer size="19" color="#ff0c29" />
               </div>
               <div className="w-32 ml-6">
-                <div style={{ fontWeight: 700, fontSize: 25 }}>50 +</div>
+                <div style={{ fontWeight: 700, fontSize: 25 }}>
+                  {totalRequests.toLocaleString()}
+                </div>
                 <div style={{ fontWeight: 400, fontSize: 20 }}>Requests</div>
               </div>
             </div>
@@ -84,7 +93,7 @@ const TheBox = styled.div`
   height: 19.22px;
 
   background: #0d1025;
-  opacity: 0.63;
+  opacity: 0.8;
   filter: blur(94px);
   border-radius: 10px;
 `;
