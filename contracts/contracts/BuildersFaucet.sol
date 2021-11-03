@@ -30,9 +30,6 @@ contract BuildersFaucet {
     //mapping user address to user(contributor) struct
     mapping(address => Contributor) public contributors;
 
-    // timestamp when a certain addresss requested funds
-    mapping(address => uint256) public lastTimeSentAt;
-
     //deopist event
     event Deposited(
         address indexed userAddress,
@@ -99,16 +96,16 @@ contract BuildersFaucet {
         view
         returns (uint256)
     {
-        uint256 canSendMoney = 0;
-        if (lastTimeSentAt[userAddress] > 0) {
-            if (lastTimeSentAt[userAddress] + 24 hours > block.timestamp) {
-                canSendMoney =
-                    lastTimeSentAt[userAddress] +
+        uint256 timeToWaitUntilNextRequest = 0;
+        if (contributors[userAddress].lastTimeSentAt > 0) {
+            if (contributors[userAddress].lastTimeSentAt + 24 hours > block.timestamp) {
+                timeToWaitUntilNextRequest =
+                    contributors[userAddress].lastTimeSentAt +
                     24 hours -
                     block.timestamp;
             }
         }
-        return canSendMoney;
+        return timeToWaitUntilNextRequest;
     }
 
     //this will pay out users who request -- the reason we have address as input paramter and not msg.sender is becasue we will use web3 on the frontend to get the user's address
@@ -121,7 +118,7 @@ contract BuildersFaucet {
 
         //update public variables
         totalRequested = totalRequested + payOutAmt;
-        totalRequests = totalRequests++;
+        totalRequests = totalRequests + 1;
 
         //update user variables
 
@@ -134,28 +131,24 @@ contract BuildersFaucet {
         totalFunds = address(this).balance;
     }
 
-    //returns total fund sin contract
+    //returns total amount of ETH contributed
     function gettotalContributed() public view returns (uint256) {
         // console.log("We have %d total funds!", totalFunds);
         return totalContributed;
     }
 
-    //returns total fund sin contract
+    //returns total funds sin contract
     function getTotalFunds() public view returns (uint256) {
-        // console.log("We have %d total funds!", totalFunds);
-
         return totalFunds;
     }
 
     //returns total contributors
     function getTotalContributors() public view returns (uint256) {
-        // console.log("We have %d total funds!", totalFunds);
         return totalContributors;
     }
 
     //returns total requests
     function getTotalRequests() public view returns (uint256) {
-        // console.log("We have %d total funds!", totalFunds);
         return totalRequested;
     }
 }
