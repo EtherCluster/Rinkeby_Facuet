@@ -149,6 +149,6 @@ contract BuildersFaucet {
 
     //returns total requests
     function getTotalRequests() public view returns (uint256) {
-        return totalRequested;
+        return totalRequests;
     }
 }
