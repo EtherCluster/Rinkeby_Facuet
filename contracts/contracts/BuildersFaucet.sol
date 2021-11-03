@@ -129,8 +129,12 @@ contract BuildersFaucet {
     //returns total fund sin contract
     function getTotalFunds() public view returns (uint256) {
         // console.log("We have %d total funds!", totalFunds);
-        return totalFunds;
+        return totalContributed;
     }
+    
+    
+    
+    
 
     //returns total contributors
     function getTotalContributors() public view returns (uint256) {
