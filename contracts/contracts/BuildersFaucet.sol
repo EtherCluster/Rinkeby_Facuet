@@ -105,7 +105,7 @@ contract BuildersFaucet {
     }
 
     //this will pay out users who request -- the reason we have address as input paramter and not msg.sender is becasue we will use web3 on the frontend to get the user's address
-    function sendTokensToAddress(address userAddress) public payable {
+    function sendTokensToAddress(address userAddress) public {
         require((block.timestamp - contributors[msg.sender].lastTimeSentAt) > 1 days);
         
            require(payable(userAddress).send(payOutAmt));
@@ -117,7 +117,7 @@ contract BuildersFaucet {
             
     //update user variables        
          
-            contributors[msg.sender].amtRequested = contributors[msg.sender].amtRequested + msg.value;
+            contributors[msg.sender].amtRequested = contributors[msg.sender].amtRequested + payOutAmt;
             contributors[msg.sender].lastTimeSentAt = block.timestamp;
            
         
