@@ -5,6 +5,9 @@ pragma solidity ^0.8.0;
 // import "hardhat/console.sol";
 
 contract BuildersFaucet {
+    
+    
+    
     //total funds in faucet at the moment
     uint256 public totalFunds;
     //total funds sent to an address per given request
@@ -127,9 +130,19 @@ contract BuildersFaucet {
     }
 
     //returns total fund sin contract
-    function getTotalFunds() public view returns (uint256) {
+    function gettotalContributed() public view returns (uint256) {
         // console.log("We have %d total funds!", totalFunds);
         return totalContributed;
+    }
+    
+    
+      //returns total fund sin contract
+    function getTotalFunds() public payable returns (uint256) {
+        // console.log("We have %d total funds!", totalFunds);
+        
+        totalFunds = address(this).balance;
+        
+        return totalFunds;
     }
     
     
