@@ -12,7 +12,7 @@ const main = async () => {
   let totalFunds = await buildersFaucetContract.getTotalFunds();
   totalFunds = parseInt(totalFunds);
   console.log("🏦 totalFunds: ", totalFunds);
-
+  // return false;
   const amountToDeposit = 80000000;
   console.log("💰 → 🐷 depositing => ", amountToDeposit);
   let tx = await buildersFaucetContract.deposit({ value: amountToDeposit });
@@ -30,6 +30,15 @@ const main = async () => {
   totalFunds = parseInt(totalFunds);
   console.log("🏦 totalFunds: ", totalFunds);
 
+  let timeToWaitUntilNextRequest =
+    await buildersFaucetContract.getTimeToWaitUntilNextRequest(
+      "0x061294782b7C73a675cF54124853c8133e3463FC"
+    );
+  console.log(
+    "timeToWaitUntilNextRequest:::::::::",
+    parseInt(timeToWaitUntilNextRequest)
+  );
+
   console.log(
     "💸 💸 💸 💸 💸  sending money to => ",
     "0x061294782b7C73a675cF54124853c8133e3463FC"
@@ -42,6 +51,16 @@ const main = async () => {
   totalFunds = await buildersFaucetContract.getTotalFunds();
   totalFunds = parseInt(totalFunds);
   console.log("🏦 totalFunds: ", totalFunds);
+
+  await sleep(3000);
+
+  timeToWaitUntilNextRequest =
+    await buildersFaucetContract.getTimeToWaitUntilNextRequest(
+      "0x061294782b7C73a675cF54124853c8133e3463FC"
+    );
+  console.log("timeToWaitUntilNextRequest");
+  console.log(parseInt(timeToWaitUntilNextRequest));
+  return false;
 
   console.log(
     "💸 💸 💸 💸 💸  sending money to => ",
@@ -123,3 +142,7 @@ runMain();
 // };
 
 // runMain();
+
+const sleep = async (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};

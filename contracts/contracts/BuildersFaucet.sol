@@ -96,22 +96,17 @@ contract BuildersFaucet {
         view
         returns (uint256)
     {
-        uint256 timeToWaitUntilNextRequest = 0;
         if (contributors[userAddress].lastTimeSentAt > 0) {
-            if (contributors[userAddress].lastTimeSentAt + 24 hours > block.timestamp) {
-                timeToWaitUntilNextRequest =
-                    contributors[userAddress].lastTimeSentAt +
-                    24 hours -
-                    block.timestamp;
-            }
+            return contributors[userAddress].lastTimeSentAt + 24 hours - block.timestamp;
+        } else {
+            return 0;
         }
-        return timeToWaitUntilNextRequest;
     }
 
     //this will pay out users who request -- the reason we have address as input paramter and not msg.sender is becasue we will use web3 on the frontend to get the user's address
     function sendTokensToAddress(address userAddress) public {
         require(
-            (block.timestamp - contributors[msg.sender].lastTimeSentAt) > 1 days
+            (block.timestamp - contributors[userAddress].lastTimeSentAt) > 1 days
         );
 
         require(payable(userAddress).send(payOutAmt));
@@ -121,11 +116,10 @@ contract BuildersFaucet {
         totalRequests = totalRequests + 1;
 
         //update user variables
-
-        contributors[msg.sender].amtRequested =
-            contributors[msg.sender].amtRequested +
+        contributors[userAddress].amtRequested =
+            contributors[userAddress].amtRequested +
             payOutAmt;
-        contributors[msg.sender].lastTimeSentAt = block.timestamp;
+        contributors[userAddress].lastTimeSentAt = block.timestamp;
 
         emit TokensSent(userAddress, payOutAmt, address(this).balance, totalRequests);
         totalFunds = address(this).balance;
@@ -133,7 +127,6 @@ contract BuildersFaucet {
 
     //returns total amount of ETH contributed
     function gettotalContributed() public view returns (uint256) {
-        // console.log("We have %d total funds!", totalFunds);
         return totalContributed;
     }
 
