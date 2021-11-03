@@ -37,13 +37,16 @@ contract BuildersFaucet {
     event Deposited(
         address indexed userAddress,
         uint256 weiAmount,
-        uint256 thisTotal
+        uint256 thisTotal,
+        uint256 totalContributors
     );
+
     //requested event
     event TokensSent(
         address indexed userAddress,
         uint256 weiAmount,
-        uint256 thisTotal
+        uint256 thisTotal,
+        uint256 totalRequests
     );
     //contract owner
     address public owner;
@@ -80,7 +83,7 @@ contract BuildersFaucet {
                 msg.value;
         }
 
-        emit Deposited(msg.sender, msg.value, address(this).balance);
+        emit Deposited(msg.sender, msg.value, address(this).balance, totalContributors);
         totalFunds = address(this).balance;
     }
 
@@ -127,7 +130,7 @@ contract BuildersFaucet {
             payOutAmt;
         contributors[msg.sender].lastTimeSentAt = block.timestamp;
 
-        emit TokensSent(userAddress, payOutAmt, address(this).balance);
+        emit TokensSent(userAddress, payOutAmt, address(this).balance, totalRequests);
         totalFunds = address(this).balance;
     }
 
