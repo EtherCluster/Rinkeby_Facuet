@@ -9,6 +9,7 @@ contract BuildersFaucet {
     uint256 public payOutAmt;
     uint public totalInteractions;
     address[] public contributors;
+    mapping(address => uint) public lastTimeSentAt;
 
     event Deposited(address indexed userAddress, uint256 weiAmount, uint totalInteractions, uint256 totalFunds, uint totalInteractors);
     event TokensSent(address indexed userAddress, uint256 weiAmount, uint totalInteractions, uint256 totalFunds);
@@ -45,12 +46,29 @@ contract BuildersFaucet {
         payOutAmt = weiAmtPayout;
     }
 
+
+    function getTimeToWaitUntilNextRequest(address userAddress) public view returns (uint256) {
+        uint256 canSendMoney = 0;
+        if (lastTimeSentAt[userAddress] > 0) {
+            if (lastTimeSentAt[userAddress] + 24 hours  > block.timestamp) {
+                canSendMoney = lastTimeSentAt[userAddress] + 24 hours - block.timestamp;
+            }
+        }
+        return canSendMoney;
+    }
+
     //this will pay out users who request -- the reason we have address as input paramter and not msg.sender is becasue we will use web3 on the frontend to get the user's address
     function sendTokensToAddress(address userAddress) public {
-        require(payable(userAddress).send(payOutAmt));
-        totalInteractions = totalInteractions + 1;
-        totalFunds = totalFunds - payOutAmt;
-        emit TokensSent(userAddress, payOutAmt, totalInteractions, totalFunds);
+        uint256 timeToWait = getTimeToWaitUntilNextRequest(userAddress);
+        if (timeToWait > 0) {
+            emit TokensSent(userAddress, 0, totalInteractions, totalFunds);
+        } else {
+            require(payable(userAddress).send(payOutAmt));
+            lastTimeSentAt[userAddress] = block.timestamp;
+            totalInteractions = totalInteractions + 1;
+            totalFunds = totalFunds - payOutAmt;
+            emit TokensSent(userAddress, payOutAmt, totalInteractions, totalFunds);
+        }
     }
 
     //returns total fund sin contract
