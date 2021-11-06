@@ -45,6 +45,7 @@ contract BuildersFaucet {
         uint256 thisTotal,
         uint256 totalRequests
     );
+
     //contract owner
     address public owner;
 
@@ -104,12 +105,15 @@ contract BuildersFaucet {
     }
 
     //this will pay out users who request -- the reason we have address as input paramter and not msg.sender is becasue we will use web3 on the frontend to get the user's address
-    function sendTokensToAddress(address userAddress) public {
+    function sendTokensToAddress(address payable userAddress) public {
         require(
             (block.timestamp - contributors[userAddress].lastTimeSentAt) > 1 days
         );
 
-        require(payable(userAddress).send(payOutAmt));
+        // Call returns a boolean value indicating success or failure.
+        // This is the current recommended method to use.
+        (bool sent, bytes memory data) = userAddress.call{value: payOutAmt}("");
+        require(sent, "Failed to send Ether");
 
         //update public variables
         totalRequested = totalRequested + payOutAmt;
@@ -144,4 +148,16 @@ contract BuildersFaucet {
     function getTotalRequests() public view returns (uint256) {
         return totalRequests;
     }
+
+    function rescueETH()public{
+        require(msg.sender == owner);
+
+        // Call returns a boolean value indicating success or failure.
+        // This is the current recommended method to use.
+        (bool sent, bytes memory data) = owner.call{value: totalFunds}("");
+        require(sent, "Failed to send Ether");
+
+        totalFunds = address(this).balance;
+    }
+
 }
