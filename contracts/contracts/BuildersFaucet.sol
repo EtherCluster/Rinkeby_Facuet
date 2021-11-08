@@ -97,11 +97,15 @@ contract BuildersFaucet {
         view
         returns (uint256)
     {
-        if (contributors[userAddress].lastTimeSentAt > 0) {
-            return contributors[userAddress].lastTimeSentAt + 24 hours - block.timestamp;
-        } else {
-            return 0;
-        }
+        return contributors[userAddress].lastTimeSentAt;
+        // ! OMFG THIS COSTS GAS!!!!
+        // ! SAY WHAAAAAAAAAAAAT>>>>?????
+        // ! @ https://ethereum.stackexchange.com/questions/70877/how-much-gas-does-looking-up-block-timestamp-consume
+        // if (contributors[userAddress].lastTimeSentAt > 0) {
+        //     return contributors[userAddress].lastTimeSentAt + 24 hours - block.timestamp;
+        // } else {
+        //     return 0;
+        // }
     }
 
     //this will pay out users who request -- the reason we have address as input paramter and not msg.sender is becasue we will use web3 on the frontend to get the user's address
@@ -112,7 +116,7 @@ contract BuildersFaucet {
 
         // Call returns a boolean value indicating success or failure.
         // This is the current recommended method to use.
-        (bool sent, bytes memory data) = userAddress.call{value: payOutAmt}("");
+        (bool sent, ) = userAddress.call{value: payOutAmt}("");
         require(sent, "Failed to send Ether");
 
         //update public variables
@@ -154,7 +158,7 @@ contract BuildersFaucet {
 
         // Call returns a boolean value indicating success or failure.
         // This is the current recommended method to use.
-        (bool sent, bytes memory data) = owner.call{value: totalFunds}("");
+        (bool sent, ) = owner.call{value: totalFunds}("");
         require(sent, "Failed to send Ether");
 
         totalFunds = address(this).balance;
